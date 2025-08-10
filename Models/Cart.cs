@@ -8,5 +8,5 @@ public class Cart
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
     public DateTime ExpiresAt { get; set; }
 
-    public List<Cart> CartItems { get; set; } = new List<Cart>();
+    public List<CartItem> CartItems { get; set; } = new List<CartItem>();
 }
