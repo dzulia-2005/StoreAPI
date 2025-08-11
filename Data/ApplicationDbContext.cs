@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using storeapi.Models;
 
 namespace storeapi.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<User,IdentityRole<Guid>,Guid>
 {
     public DbSet<User> Users { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
@@ -86,5 +88,21 @@ public class ApplicationDbContext : DbContext
         {
             entity.Property(a => a.Metadata);
         });
+
+        List<IdentityRole> roles = new List<IdentityRole>
+        {
+            new IdentityRole
+            {
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            },
+            new IdentityRole
+            {
+                Name = "User",
+                NormalizedName = "USER"
+            }
+        };
+
+        builder.Entity<IdentityRole>().HasData(roles);
     }
 }

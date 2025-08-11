@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "xbI6XDjBNfoE9b9ZDmqFKqcRcGWL6d9qs8GuESPsCo0=",
+  "Source": "storeapi",
+  "BasePath": "_content/storeapi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
