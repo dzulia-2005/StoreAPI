@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using storeapi.Models;
 
 namespace storeapi.Data;
@@ -22,6 +23,14 @@ public class ApplicationDbContext : IdentityDbContext<User,IdentityRole<Guid>,Gu
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder builder)
+    {
+        builder.ConfigureWarnings(warning => 
+            warning.Ignore(RelationalEventId.PendingModelChangesWarning));
+        
+        base.OnConfiguring(builder);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -102,6 +111,7 @@ public class ApplicationDbContext : IdentityDbContext<User,IdentityRole<Guid>,Gu
                 NormalizedName = "USER"
             }
         };
+        
 
         builder.Entity<IdentityRole>().HasData(roles);
     }

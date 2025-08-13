@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace storeapi.Models;
 
 public class Order
@@ -5,7 +7,7 @@ public class Order
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
-    
+    [Column(TypeName = "decimal(18,2)")]
     public decimal ToTalAmount { get; set; }
     public string Currency { get; set; }
     public string Status { get; set; } = "Pending";

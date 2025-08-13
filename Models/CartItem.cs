@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace storeapi.Models;
 
 public class CartItem
@@ -8,5 +10,6 @@ public class CartItem
     public Guid ProductId { get; set; }
     public Product Product { get; set; }
     public int Quantity { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal UnitPrice { get; set; }
 }
