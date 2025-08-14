@@ -54,8 +54,8 @@ public class TokenService : ITokenService
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(3),
             SigningCredentials = cred,
-            Issuer = _configuration["Issuer"],
-            Audience = _configuration["Audience"]
+            Issuer = _configuration["JWT:Issuer"],
+            Audience = _configuration["JWT:Audience"]
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
