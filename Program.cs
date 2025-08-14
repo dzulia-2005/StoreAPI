@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using storeapi.Data;
 using storeapi.Interface;
 using storeapi.Models;
+using storeapi.Repository;
 using storeapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
