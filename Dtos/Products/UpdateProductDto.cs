@@ -2,9 +2,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace storeapi.Dtos.Products;
 
-public class ProductDto
+public class UpdateProductDto
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Description { get; set; }

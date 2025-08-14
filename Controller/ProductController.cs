@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using storeapi.Dtos.Products;
 using storeapi.Interface;
+using storeapi.Mappers;
 
 namespace storeapi.Controller;
 
@@ -26,7 +27,7 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> GetById([FromRoute] Guid Id)
     {
         var product = await _productRepository.GetProductByIdAsync(Id);
-        return Ok(product);
+        return Ok(product.toProductDto());
     }
 
     [HttpPost("create")]
@@ -42,4 +43,27 @@ public class ProductController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-}
+
+    [HttpPut("update/{Id:guid}")]
+    public async Task<IActionResult> EditProduct([FromRoute] Guid Id,[FromBody] UpdateProductDto productDto)
+    {
+        var product = await _productRepository.UpdateProductAsync(Id, productDto);
+        if (product == null)
+        {
+            return NotFound("product not found");
+        }
+
+        return Ok(product.toProductDto());
+    }
+
+    [HttpDelete("delete/{Id:guid}")]
+    public async Task<IActionResult> DeleteProduct([FromRoute] Guid Id)
+    {
+        var product = await _productRepository.DeleteProductAsync(Id);
+        if (product==null)
+        {
+            return NotFound("product not found");
+        }
+        return NoContent();
+    }
+} 

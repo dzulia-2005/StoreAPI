@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using storeapi.Data;
 using storeapi.Dtos.Products;
@@ -46,6 +47,41 @@ public class ProductRepository : IProductRepository
         };
 
         await _context.Products.AddAsync(product);
+        await _context.SaveChangesAsync();
+        return product;
+    }
+
+    public async Task<Product?> UpdateProductAsync(Guid Id,UpdateProductDto productDto)
+    {
+        var existingProduct = await _context.Products.FindAsync(Id);
+        if (existingProduct==null)
+        {
+            return null;
+        }
+
+        existingProduct.Name = productDto.Name;
+        existingProduct.StockQuantity = productDto.StockQuantity;
+        existingProduct.Price = productDto.Price;
+        existingProduct.Currency = productDto.Currency;
+        existingProduct.Description = productDto.Description;
+        existingProduct.IsActive = productDto.IsActive;
+        existingProduct.UserId = productDto.UserId;
+        existingProduct.Slug = productDto.Slug;
+
+        await _context.SaveChangesAsync();
+        return existingProduct;
+
+    }
+
+    public async Task<Product?> DeleteProductAsync(Guid Id)
+    {
+        var product = await _context.Products.FindAsync(Id);
+        if (product==null)
+        {
+            return null;
+        }
+
+        _context.Products.Remove(product);
         await _context.SaveChangesAsync();
         return product;
     }
