@@ -69,7 +69,11 @@ public class ApplicationDbContext : IdentityDbContext<User,IdentityRole<Guid>,Gu
                 .WithOne(u => u.Product)
                 .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
-
+            
+            entity.HasOne(p => p.User)
+                .WithMany(u => u.Products)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<Cart>(entity =>

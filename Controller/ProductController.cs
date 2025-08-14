@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using storeapi.Dtos.Products;
 using storeapi.Interface;
 
 namespace storeapi.Controller;
@@ -27,6 +28,18 @@ public class ProductController : ControllerBase
         var product = await _productRepository.GetProductByIdAsync(Id);
         return Ok(product);
     }
-    
-    
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] CreateProductDto productDto)
+    {
+        try
+        {
+            var createdProduct = await _productRepository.AddProductAsync(productDto);
+            return CreatedAtAction(nameof(GetById), new { Id = createdProduct.Id }, createdProduct);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 }
