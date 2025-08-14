@@ -137,6 +137,23 @@ public class AuthController : ControllerBase
         await _signInManager.SignOutAsync();
         return Ok(new {message = "logout successfully"});
     }
-    
-    
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshRequestDto dto)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.RefreshToken == dto.RefreshToken);
+        if (user==null || user.RefreshTokenExpiry == DateTime.UtcNow)
+        {
+            return Unauthorized("invalid or expired token");
+        }
+
+        var NewAccessToken = _tokenService.CreateToken(user);
+        var NewRefreshToken = await _tokenService.GenerateAndSaveRefreshToken(user);
+
+        return Ok(new
+        {
+            AccessToken = NewAccessToken,
+            refreshToken = NewRefreshToken
+        });
+    }
 }
