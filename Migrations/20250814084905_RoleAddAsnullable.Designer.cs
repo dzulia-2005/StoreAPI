@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using storeapi.Data;
 
@@ -11,9 +12,11 @@ using storeapi.Data;
 namespace storeapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250814084905_RoleAddAsnullable")]
+    partial class RoleAddAsnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,13 +46,13 @@ namespace storeapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5c3a88bb-d0df-4561-a911-5d58495be7f6",
+                            Id = "4b3dac24-3339-46c6-9371-7b1108ac71bf",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "297dc3eb-f8be-4d4e-9863-41361ec2caee",
+                            Id = "508af9a3-0918-4b19-a514-e25fa98797bd",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -524,7 +527,6 @@ namespace storeapi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")

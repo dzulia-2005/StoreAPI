@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using storeapi.Data;
 
@@ -11,9 +12,11 @@ using storeapi.Data;
 namespace storeapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250814084631_removeFullname")]
+    partial class removeFullname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,13 +46,13 @@ namespace storeapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5c3a88bb-d0df-4561-a911-5d58495be7f6",
+                            Id = "39a2dbf2-aa51-40c4-82e5-38d14df43ac6",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "297dc3eb-f8be-4d4e-9863-41361ec2caee",
+                            Id = "1e59b01f-cfba-43d2-ac12-a4e1af69581b",
                             Name = "User",
                             NormalizedName = "USER"
                         });

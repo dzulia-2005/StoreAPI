@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,32 +35,24 @@ public class AuthController : ControllerBase
             {
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
+                Role = "USER"
             };
+            
+            var createdResult = await _userManager.CreateAsync(user, registerDto.Password);
+            if (!createdResult.Succeeded)
+            {
+                return StatusCode(500,createdResult.Errors);
+            }
 
             var accessToken = _tokenService.CreateToken(user);
             var refreshToken = await _tokenService.GenerateAndSaveRefreshToken(user);
 
-            var createdResult = await _userManager.CreateAsync(user, registerDto.Password);
-            if (createdResult.Succeeded)
+            return Ok(new NewUserDto
             {
-                var RoleResult = await _userManager.AddToRoleAsync(user, "USER");
-                if (RoleResult.Succeeded)
-                {
-                    return Ok(new NewUserDto
-                    {
-                        AccessToken = accessToken,
-                        RefreshToken = refreshToken,
-                    });
-                }
-                else
-                {
-                    return StatusCode(500, RoleResult.Errors);
-                }
-            }
-            else
-            {
-                return StatusCode(500, createdResult.Errors);
-            }
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            });
+
         }
         catch (Exception e)
         {
@@ -95,6 +89,44 @@ public class AuthController : ControllerBase
         catch (Exception e)
         {
             return StatusCode(500, e);
+        }
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = Guid.Parse(userIdClaim);
+            var user =await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Email,
+                    u.UserName,
+                    u.Role,
+                })
+                .SingleOrDefaultAsync();
+
+            if (user==null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
         }
     }
 }

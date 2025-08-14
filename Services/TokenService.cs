@@ -1,6 +1,8 @@
+using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using storeapi.Data;
 using storeapi.Interface;
@@ -14,17 +16,18 @@ public class TokenService : ITokenService
     private readonly SymmetricSecurityKey _key;
     private readonly ApplicationDbContext _context;
 
-    public TokenService(IConfiguration configuration,ApplicationDbContext context,SymmetricSecurityKey key)
+    public TokenService(IConfiguration configuration,ApplicationDbContext context)
     {
         _context = context;
         _configuration = configuration;
-        _key = key;
+        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SignInKey"]));
     }
 
     public string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
 

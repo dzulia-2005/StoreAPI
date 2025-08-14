@@ -4,8 +4,7 @@ namespace storeapi.Models;
 
 public class User : IdentityUser<Guid>
 {
-    public string FullName { get; set; }
-    public string Role { get; set; }
+    public string Role { get; set; } = "USER";
     public DateTime CreatedAt { get; set; }
 
     public List<Order> Orders { get; set; } = new List<Order>();
