@@ -129,4 +129,14 @@ public class AuthController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok(new {message = "logout successfully"});
+    }
+    
+    
 }
