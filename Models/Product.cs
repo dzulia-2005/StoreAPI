@@ -18,8 +18,8 @@ public class Product
     public User User { get; set; }
     
     public DateTime CreatedAt { get; set; }
-    public Guid CategoryId { get; set; }
-    public Category Category { get; set; }
+    public Guid? CategoryId { get; set; }
+    public Category? Category { get; set; }
     public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
     public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using storeapi.Data;
 
@@ -11,9 +12,11 @@ using storeapi.Data;
 namespace storeapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250815115544_userIdISRequired")]
+    partial class userIdISRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,13 +46,13 @@ namespace storeapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "21053383-dd90-4a0b-9d53-e1dd937fb5dd",
+                            Id = "69d282e0-1ef3-463e-9fe9-18a7566e0d29",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "491163d6-e8d3-43a2-8fe9-c3e2f2013025",
+                            Id = "ca71216f-a6f7-41d8-b80b-5e65585a2c96",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -407,7 +410,7 @@ namespace storeapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -707,7 +710,8 @@ namespace storeapi.Migrations
                     b.HasOne("storeapi.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("storeapi.Models.User", "User")
                         .WithMany("Products")
