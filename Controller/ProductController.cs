@@ -49,7 +49,7 @@ public class ProductController : ControllerBase
 
             var userId = Guid.Parse(userIdClaim);
             var createdProduct = await _productRepository.AddProductAsync(productDto,userId);
-            return CreatedAtAction(nameof(GetById), new { Id = createdProduct.Id }, createdProduct);
+            return CreatedAtAction(nameof(GetById), new { Id = createdProduct.Id }, createdProduct.toProductDto());
         }
         catch (Exception e)
         {

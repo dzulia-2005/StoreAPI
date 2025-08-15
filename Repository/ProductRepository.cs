@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using storeapi.Data;
 using storeapi.Dtos.Products;
 using storeapi.Interface;
+using storeapi.Mappers;
 using storeapi.Models;
 
 namespace storeapi.Repository;
@@ -31,21 +34,16 @@ public class ProductRepository : IProductRepository
     
     public async Task<Product?> AddProductAsync(CreateProductDto productDto,Guid UserId)
     {
-
+        
         var user = await _context.Users.FindAsync(UserId);
         if (user == null)
             throw new Exception("User not found");
         
-        Category? category = null;
-        if (productDto.CategoryId != Guid.Empty)
-        {
-            category = await _context.Categories.FindAsync(productDto.CategoryId);
-            if (category == null)
-                throw new Exception("Category not found");
-        }
+       
         
         var product = new Product
         {
+            Id = Guid.NewGuid(),
             Name = productDto.Name,
             Slug = productDto.Slug,
             Description = productDto.Description,
@@ -54,7 +52,6 @@ public class ProductRepository : IProductRepository
             StockQuantity = productDto.StockQuantity,
             IsActive = productDto.IsActive,
             UserId = UserId,
-            CategoryId = productDto?.CategoryId,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -78,7 +75,6 @@ public class ProductRepository : IProductRepository
         existingProduct.Currency = productDto.Currency;
         existingProduct.Description = productDto.Description;
         existingProduct.IsActive = productDto.IsActive;
-        existingProduct.UserId = productDto.UserId;
         existingProduct.Slug = productDto.Slug;
         
 

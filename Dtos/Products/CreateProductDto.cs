@@ -13,5 +13,5 @@ public class CreateProductDto
     public string Currency { get; set; } = "GEL";
     public int StockQuantity { get; set; }
     public bool IsActive { get; set; }
-    public Guid CategoryId { get; set; }
+  
 }
