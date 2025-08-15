@@ -7,7 +7,7 @@ public class CreateProductDto
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Description { get; set; }
-    public Guid UserId { get; set; }
+    
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
     public string Currency { get; set; } = "GEL";

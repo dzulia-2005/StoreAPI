@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using storeapi.Dtos.Products;
 using storeapi.Interface;
@@ -10,10 +12,12 @@ namespace storeapi.Controller;
 public class ProductController : ControllerBase
 {
     private readonly IProductRepository _productRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ProductController(IProductRepository productRepository)
+    public ProductController(IProductRepository productRepository,IHttpContextAccessor httpContextAccessor)
     {
         _productRepository = productRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpGet("getall")]
@@ -24,6 +28,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{Id:guid}")]
+    [Authorize]
     public async Task<IActionResult> GetById([FromRoute] Guid Id)
     {
         var product = await _productRepository.GetProductByIdAsync(Id);
@@ -31,11 +36,19 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("create")]
+    [Authorize]
     public async Task<IActionResult> Create([FromBody] CreateProductDto productDto)
     {
         try
         {
-            var createdProduct = await _productRepository.AddProductAsync(productDto);
+            var userIdClaim = _httpContextAccessor.HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim==null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = Guid.Parse(userIdClaim);
+            var createdProduct = await _productRepository.AddProductAsync(productDto,userId);
             return CreatedAtAction(nameof(GetById), new { Id = createdProduct.Id }, createdProduct);
         }
         catch (Exception e)
@@ -45,6 +58,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("update/{Id:guid}")]
+    [Authorize]
     public async Task<IActionResult> EditProduct([FromRoute] Guid Id,[FromBody] UpdateProductDto productDto)
     {
         var product = await _productRepository.UpdateProductAsync(Id, productDto);
@@ -57,6 +71,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("delete/{Id:guid}")]
+    [Authorize]
     public async Task<IActionResult> DeleteProduct([FromRoute] Guid Id)
     {
         var product = await _productRepository.DeleteProductAsync(Id);

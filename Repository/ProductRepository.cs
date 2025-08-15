@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using storeapi.Data;
@@ -21,19 +22,15 @@ public class ProductRepository : IProductRepository
         return await _context.Products.ToListAsync();
     }
 
+    
     public async Task<Product> GetProductByIdAsync(Guid Id)
     {
         return await _context.Products.FindAsync(Id);
     }
-
-    public async Task<Product?> AddProductAsync(CreateProductDto productDto)
+    
+    
+    public async Task<Product?> AddProductAsync(CreateProductDto productDto,Guid UserId)
     {
-        var user = await _context.Products.FindAsync(productDto.UserId);
-        if (user==null)
-        {
-            throw new Exception("user not found");
-        }
-
         var product = new Product
         {
             Name = productDto.Name,
@@ -43,14 +40,15 @@ public class ProductRepository : IProductRepository
             Currency = productDto.Currency,
             StockQuantity = productDto.StockQuantity,
             IsActive = productDto.IsActive,
-            UserId = productDto.UserId,
+            UserId = UserId,
         };
 
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
         return product;
     }
-
+    
+    
     public async Task<Product?> UpdateProductAsync(Guid Id,UpdateProductDto productDto)
     {
         var existingProduct = await _context.Products.FindAsync(Id);
@@ -73,6 +71,7 @@ public class ProductRepository : IProductRepository
 
     }
 
+    
     public async Task<Product?> DeleteProductAsync(Guid Id)
     {
         var product = await _context.Products.FindAsync(Id);
