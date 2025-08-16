@@ -32,7 +32,6 @@ public static class ProductMappers
             IsActive = productDto.IsActive,
             Price = productDto.Price,
             Description = productDto.Description,
-            UserId = productDto.UserId
         };
     }
 }
