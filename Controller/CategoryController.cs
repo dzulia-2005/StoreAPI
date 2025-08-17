@@ -45,11 +45,11 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid Id)
     {
         var category = await _categoryRepository.DeleteCategoryAsync(Id);
-        if (category == null)
+        if (category==null)
         {
-            return NotFound("category not found");
+            return NotFound();
         }
 
-        return Ok(category);
+        return NoContent();
     }
 }
