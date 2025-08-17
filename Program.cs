@@ -18,6 +18,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+builder.Services.AddScoped<IOrderRepository,OrderRepository>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
