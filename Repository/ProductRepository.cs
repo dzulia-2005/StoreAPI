@@ -22,15 +22,15 @@ public class ProductRepository : IProductRepository
     
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _context.Products.ToListAsync();
+        return await _context.Products
+            .Include(p=>p.Category)
+            .ToListAsync();
     }
-
     
     public async Task<Product> GetProductByIdAsync(Guid Id)
     {
         return await _context.Products.FindAsync(Id);
     }
-    
     
     public async Task<Product?> AddProductAsync(CreateProductDto productDto,Guid UserId)
     {
@@ -39,7 +39,6 @@ public class ProductRepository : IProductRepository
         if (user == null)
             throw new Exception("User not found");
         
-       
         
         var product = new Product
         {
