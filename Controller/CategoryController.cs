@@ -28,4 +28,16 @@ public class CategoryController : ControllerBase
         var category = _categoryRepository.AddCategoryAsync(categoryDto);
         return CreatedAtAction(nameof(GetCategories), new { Id = category.Id }, category);
     }
+
+    [HttpPut("categories/update/{Id:guid}")]
+    public async Task<IActionResult> UpdateCategory([FromRoute] Guid Id, UpdateCategoryDto categoryDto)
+    {
+        var category = await _categoryRepository.UpdateCategoryAsync(Id, categoryDto);
+        if (category == null)
+        {
+            return NotFound("category not found");
+        }
+
+        return Ok(category);
+    }
 }

@@ -26,7 +26,7 @@ public class CategoryRepository : ICategoryRepository
         var existCategory =
             await _context.Categories.AnyAsync(c => c.Name == categoryDto.Name || c.Slug == categoryDto.Slug);
 
-        if (existCategory)
+        if (!existCategory)
         {
             throw new Exception("category with same name or slug is already exist");
         }
@@ -35,6 +35,22 @@ public class CategoryRepository : ICategoryRepository
         _context.Categories.Add(createCategory);
         await _context.SaveChangesAsync();
         return createCategory;
+    }
+
+    public async Task<Category?> UpdateCategoryAsync(Guid Id,UpdateCategoryDto categoryDto)
+    {
+        var existCategory = await _context.Categories.FindAsync(Id);
+        if (existCategory == null)
+        {
+            return null;
+        }
+
+        var updateCategory = categoryDto.ToCategoryFromUpdate();
+        existCategory.Name = updateCategory.Name;
+        existCategory.Slug = updateCategory.Slug;
+
+        await _context.SaveChangesAsync();
+        return existCategory;
     }
 
    

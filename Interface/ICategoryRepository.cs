@@ -7,5 +7,6 @@ public interface ICategoryRepository
 {
     Task<Category?> GetCategoriesAsync(Guid Id);
     Task<Category?> AddCategoryAsync(CreateCategoryDto categoryDto);
-
+    Task<Category?> UpdateCategoryAsync(Guid Id,UpdateCategoryDto categoryDto);
+    Task<Category?> DeleteCategoryAsync(Guid Id);
 }
