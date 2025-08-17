@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using storeapi.Data;
 using storeapi.Dtos.Category;
@@ -49,6 +50,14 @@ public class CategoryRepository : ICategoryRepository
         existCategory.Name = updateCategory.Name;
         existCategory.Slug = updateCategory.Slug;
 
+        await _context.SaveChangesAsync();
+        return existCategory;
+    }
+
+    public async Task<Category?> DeleteCategoryAsync(Guid Id)
+    {
+        var existCategory = await _context.Categories.FindAsync(Id);
+        _context.Categories.Remove(existCategory);
         await _context.SaveChangesAsync();
         return existCategory;
     }

@@ -40,4 +40,16 @@ public class CategoryController : ControllerBase
 
         return Ok(category);
     }
+
+    [HttpDelete("categories/delete/{Id:guid}")]
+    public async Task<IActionResult> DeleteCategory([FromRoute] Guid Id)
+    {
+        var category = await _categoryRepository.DeleteCategoryAsync(Id);
+        if (category == null)
+        {
+            return NotFound("category not found");
+        }
+
+        return Ok(category);
+    }
 }
