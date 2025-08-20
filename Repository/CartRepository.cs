@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using storeapi.Data;
+using storeapi.Interface;
 using storeapi.Models;
 
 namespace storeapi.Repository;
 
-public class CartRepository
+public class CartRepository : ICartRepository
 {
     private readonly ApplicationDbContext _context;
 

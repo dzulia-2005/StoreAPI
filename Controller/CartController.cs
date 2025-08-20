@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using storeapi.Dtos.Cart;
 using storeapi.Extension;
 using storeapi.Interface;
+using storeapi.Mappers;
 using storeapi.Models;
 
 namespace storeapi.Controller;
@@ -21,6 +22,9 @@ public class CartController : ControllerBase
     public async Task<IActionResult> AddItem([FromBody] AddCartItemDto dto)
     {
         var UserId = User.GetUserId();
-        var item = await _cartRepository.AddCartItemAsync(UserId, dto.);
+        var item = await _cartRepository.AddCartItemAsync(UserId, dto.ProductId,dto.Quantity);
+        var cart = await _cartRepository.GetCartByUserIdAsync(UserId);
+        return Ok(cart?.ToCartDto());
     }
+    
 }
